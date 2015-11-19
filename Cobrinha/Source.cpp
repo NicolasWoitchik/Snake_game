@@ -33,7 +33,7 @@ typedef struct Cobra {
 #define WALL_LEFT_RIGHT 186
 #define WALL_TOP_BOTTOM 205
 #define BODY_HEAD 206
-#define BODY 219
+#define BODY 'O'/* 219 = ? / 233 =  */
 #define FOOD 254
 #define SPACE ' '
 
@@ -172,22 +172,24 @@ Snake * novo_corpo(char tela[HEIGHT][WIDTH], Snake * c) {
 }
 
 void finaliza_tela(char tela[HEIGHT][WIDTH],int pontos,Snake * c) {
+	/*char nome[WIDTH];
 	COORD cord;
 	FILE * fp;
 	int ch;
 	fopen_s(&fp, "tela_fim.txt", "r");
-	char nome[WIDTH];
+	
 	
 	system("cls");
 	while ((ch = fgetc(fp)) != EOF) {
 		printf("%c", ch);
 	}
+	
 	cord.X = 14;
 	cord.Y = 15;
 	cursor(cord, ' ');
-
+	scanf_s("%s", &nome);
 	free(c);
-	exit(0);
+	exit(0);*/
 }
 
 void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {	
@@ -224,7 +226,7 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {
 				cord.Y = c->y;
 				cursor(cord, BODY);
 		}
-		else if (c->y != food.Y && c->x != food.X) {
+		else if (c->y != food.Y && c->x != food.X  && tela[c->y - 1][c->x] != BODY) {
 				int x = 1;
 				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 					x++;
@@ -263,7 +265,7 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {
 				cursor(cord, BODY);
 		}
 		else {
-			if (c->y != food.Y && c->x != food.X) {
+			if (c->y != food.Y && c->x != food.X && tela[c->y + 1][c->x] != BODY) {
 				int x = 1;
 				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 					x++;
@@ -300,7 +302,7 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {
 				cursor(cord, BODY);
 		}
 		else {
-			if (c->y != food.Y && c->x != food.X) {
+			if (c->y != food.Y && c->x != food.X  && tela[c->y][c->x - 1] != BODY) {
 				int x = 1;
 				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 					x++;
@@ -336,7 +338,7 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {
 				cursor(cord, BODY);
 		}
 		else {
-			if (c->y != food.Y && c->x != food.X) {
+			if (c->y != food.Y && c->x != food.X && tela[c->y][c->x + 1] != BODY) {
 				int x = 1;
 				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 					x++;
@@ -355,7 +357,7 @@ int placar(int x, Snake *c) {
 	for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 		x++;
 	}
-	return(x);
+	return(x-3);
 }
 
 int main() {
@@ -405,6 +407,7 @@ int main() {
 
 			case 's':
 				cursor({ 0,HEIGHT },SPACE);
+				system("pause");
 				printf("seu jogo foi salvo, espero");
 				break;
 
@@ -417,8 +420,8 @@ int main() {
 		cursor(food, FOOD);
 		Sleep(70);
 		x = placar(x,corp);
-		cursor({ WIDTH/2-7 ,HEIGHT-1 },' ');
-		printf("PLACAR : %d", x);
+		cursor({ WIDTH/2-7 ,HEIGHT-1 },185);
+		printf(" PLACAR : %d %c", x,204);
 
 	}
 	return(0);
