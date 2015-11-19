@@ -23,9 +23,8 @@ enum Direcao {
 };
 
 typedef struct Cobra {
-
+	
 	int x, y;
-	boolean cabeca = false;
 	Direcao d;
 	struct Cobra * proximo;
 
@@ -34,7 +33,6 @@ typedef struct Cobra {
 #define WALL_LEFT_RIGHT 186
 #define WALL_TOP_BOTTOM 205
 #define BODY_HEAD 206
-
 #define BODY 219
 #define FOOD 254
 #define SPACE ' '
@@ -48,21 +46,21 @@ void semente(void) {
 	rand(); 
 }
 
-void comida(char tela[HEIGHT][WIDTH]) {
+COORD comida(char tela[HEIGHT][WIDTH]) {
 	int x, y;
 	COORD cord;
 	x = rand() % HEIGHT;
 	y = rand() % WIDTH;
-	if (tela[y][x] == SPACE) {
-		cord.X = x;
-		cord.Y = y;
-		tela[y][x] == FOOD;
+	if (tela[x][y] == SPACE) {
+		cord.X = y;
+		cord.Y = x;
+		tela[x][y] == FOOD;
 		cursor(cord, FOOD);
+		return(cord);
 	}
 	else {
 		comida(tela);
 	}
-	
 }
 
 
@@ -93,19 +91,17 @@ void inicializa_tela(char tela[HEIGHT][WIDTH]) {
 	tela[HEIGHT-1][0] = 200;
 	tela[0][WIDTH-1] = 187;
 	tela[HEIGHT-1][WIDTH-1] = 188;
-	comida(tela);
 }
 Snake* inicializa_snake(char tela[HEIGHT][WIDTH],Snake *corpo,int p) {
 	Snake *novo =(Snake*)malloc(sizeof(Snake));
 	if (!novo == NULL) {
-		//novo->proximo = corpo;
-		//corpo = novo;
 		Snake *aux = NULL;
 		Snake *ax;
 		
 		if (p == 2) {
 			novo->proximo = corpo;
 			corpo = novo;
+			
 		}else{
 			for (ax = corpo; ax->proximo != NULL; ax = ax->proximo);
 			novo->proximo = ax->proximo;
@@ -145,50 +141,81 @@ Snake * novo_corpo(char tela[HEIGHT][WIDTH], Snake * c) {
 	Snake *novo = (Snake*)malloc(sizeof(Snake));
 	if (!novo == NULL) {
 		for (ax = c; ax->proximo != NULL; ax = ax->proximo);
+
 		novo->proximo = ax->proximo;
 		ax->proximo = novo;
 		novo->d = ax->d;
-		novo->y = ax->y;
-		novo->x = ax->x;
+		switch (ax->d)
+		{
+		case CIMA:
+			novo->y = ax->y+1;
+			novo->x = ax->x;
+			break;
+		case BAIXO:
+			novo->y = ax->y-1;
+			novo->x = ax->x;
+			break;
+		case ESQUERDA:
+			novo->y = ax->y;
+			novo->x = ax->x+1;
+			break;
+		case DIREITA:
+			novo->y = ax->y;
+			novo->x = ax->x-1;
+			break;
+		default:
+			break;
+		}
+		
 	}
 	return c;
 }
-void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d) {	
+
+void finaliza_tela(char tela[HEIGHT][WIDTH],int pontos,Snake * c) {
 	COORD cord;
+	FILE * fp;
+	int ch;
+	fopen_s(&fp, "tela_fim.txt", "r");
+	char nome[WIDTH];
+	
+	system("cls");
+	while ((ch = fgetc(fp)) != EOF) {
+		printf("%c", ch);
+	}
+	cord.X = 14;
+	cord.Y = 15;
+	cursor(cord, ' ');
+
+	free(c);
+	exit(0);
+}
+
+void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d,COORD *f) {	
+	COORD cord;
+	COORD food = *f;
 	Snake *ax;
+	
 	switch (d)
 	{
 	case CIMA:
-		if (tela[c->y - 1][c->x] == FOOD) {
-			system("pause");
-			c->proximo = novo_corpo(tela, c);
-			comida(tela);
+		if (c->y == food.Y && c->x == food.X) {
+			*f = comida(tela);
+			tela[c->y][c->x] = SPACE;
+			cord.X = c->x;
+			cord.Y = c->y;
+			cursor(cord, SPACE);
+
+			c->proximo = novo_corpo(tela, c->proximo);
+
 		}
 		if (tela[c->y - 1][c->x] == SPACE && tela[c->y - 1][c->x] != BODY && tela[c->y - 1][c->x] != FOOD) {
-			if (c->cabeca) {
 				tela[c->y][c->x] = SPACE;
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, SPACE);
 				c->d = CIMA;
 				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
-					c->proximo->d = c->d;
-				}
-				c->y = c->y - 1;
-				tela[c->y][c->x] = BODY_HEAD;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, BODY_HEAD);
-			}
-			else {
-				tela[c->y][c->x] = SPACE;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, SPACE);
-				c->d = CIMA;
-				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
+					move_snake(tela, c->proximo, c->proximo->d,&food);
 					c->proximo->d = c->d;
 				}
 				c->y = c->y - 1;
@@ -196,45 +223,35 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d) {
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, BODY);
-			}
 		}
-		else if (tela[c->y - 1][c->x] == WALL_LEFT_RIGHT	|| tela[c->y - 1][c->x] == WALL_TOP_BOTTOM) {
-			system("pause");
+		else if (c->y != food.Y && c->x != food.X) {
+				int x = 1;
+				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
+					x++;
+				}
+				finaliza_tela(tela, x,c);
+			
 		}
 		break;
 	case BAIXO:
-		if (tela[c->y + 1][c->x] == FOOD) {
-			system("pause");
-			novo_corpo(tela, c);
-			comida(tela);
+		if (c->y == food.Y && c->x == food.X) {
+			*f = comida(tela);
+			tela[c->y][c->x] = SPACE;
+			cord.X = c->x;
+			cord.Y = c->y;
+			cursor(cord, SPACE);
+
+			c->proximo = novo_corpo(tela, c->proximo);
+
 		}
 		if (tela[c->y+1][c->x] == SPACE && tela[c->y+1][c->x] != BODY && tela[c->y + 1][c->x] != FOOD) {
-			if (c->cabeca) {
 				tela[c->y][c->x] = SPACE;
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, SPACE);
 				c->d = BAIXO;
 				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
-					c->proximo->d = c->d;
-				}
-				else {
-				}
-				c->y++;
-				tela[c->y][c->x] = BODY_HEAD;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, BODY_HEAD);
-			}
-			else {
-				tela[c->y][c->x] = SPACE;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, SPACE);
-				c->d = BAIXO;
-				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
+					move_snake(tela, c->proximo, c->proximo->d,&food);
 					c->proximo->d = c->d;
 				}
 				else {
@@ -244,44 +261,36 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d) {
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, BODY);
-			}
 		}
-		else if (tela[c->y + 2][c->x] == WALL_LEFT_RIGHT || tela[c->y + 2][c->x] == WALL_TOP_BOTTOM) {
-			system("pause");
+		else {
+			if (c->y != food.Y && c->x != food.X) {
+				int x = 1;
+				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
+					x++;
+				}
+				finaliza_tela(tela, x,c);
+			}
 		}
 		
 		break;
 	case ESQUERDA:
-		if (tela[c->y][c->x - 1] == FOOD) {
-			system("pause");
-			novo_corpo(tela, c);
-			comida(tela);
+		if (c->y == food.Y && c->x == food.X) {
+			*f = comida(tela);
+			tela[c->y][c->x] = SPACE;
+			cord.X = c->x;
+			cord.Y = c->y;
+			cursor(cord, SPACE);
+			c->proximo = novo_corpo(tela, c->proximo);
+			
 		}
 		if (tela[c->y][c->x - 1] == SPACE && tela[c->y][c->x - 1] != BODY && tela[c->y][c->x - 1] != FOOD) {
-			if (c->cabeca) {
 				tela[c->y][c->x] = SPACE;
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, SPACE);
 				c->d = ESQUERDA;
 				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
-					c->proximo->d = c->d;
-				}
-				c->x = c->x - 1;
-				tela[c->y][c->x] = BODY_HEAD;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, BODY_HEAD);
-			}
-			else {
-				tela[c->y][c->x] = SPACE;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, SPACE);
-				c->d = ESQUERDA;
-				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
+					move_snake(tela, c->proximo, c->proximo->d,&food);
 					c->proximo->d = c->d;
 				}
 				c->x = c->x - 1;
@@ -289,44 +298,35 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d) {
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, BODY);
-			}
 		}
-		else if (tela[c->y][c->x - 2] == WALL_LEFT_RIGHT || tela[c->y][c->x - 2] == WALL_TOP_BOTTOM) {
-			exit(1);
+		else {
+			if (c->y != food.Y && c->x != food.X) {
+				int x = 1;
+				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
+					x++;
+				}
+				finaliza_tela(tela, x,c);
+			}
 		}
 		
 		break;
 	case DIREITA:
-		if (tela[c->y][c->x + 1] == FOOD) {
-			system("pause");
-			novo_corpo(tela, c);
-			comida(tela);
+		if (c->y == food.Y && c->x == food.X) {
+			*f = comida(tela);
+			tela[c->y][c->x] = SPACE;
+			cord.X = c->x;
+			cord.Y = c->y;
+			cursor(cord, SPACE);
+			c->proximo = novo_corpo(tela, c->proximo);
 		}
-		if (tela[c->y][c->x+1] == SPACE && tela[c->y][c->x+1] != BODY && tela[c->y][c->x + 1] != FOOD) {
-			if (c->cabeca) {
+		if (tela[c->y][c->x+1] == SPACE && tela[c->y][c->x+1] != BODY) {
 				tela[c->y][c->x] = SPACE;
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, SPACE);
 				c->d = DIREITA;
 				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
-					c->proximo->d = c->d;
-				}
-				c->x = c->x + 1;
-				tela[c->y][c->x] = BODY_HEAD;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, BODY_HEAD);
-			}
-			else {
-				tela[c->y][c->x] = SPACE;
-				cord.X = c->x;
-				cord.Y = c->y;
-				cursor(cord, SPACE);
-				c->d = DIREITA;
-				if (c->proximo != NULL) {
-					move_snake(tela, c->proximo, c->proximo->d);
+					move_snake(tela, c->proximo, c->proximo->d,&food);
 					c->proximo->d = c->d;
 				}
 				c->x = c->x + 1;
@@ -334,26 +334,29 @@ void move_snake(char tela[HEIGHT][WIDTH], Snake* c,Direcao d) {
 				cord.X = c->x;
 				cord.Y = c->y;
 				cursor(cord, BODY);
-			}
-		}else if(tela[c->y][c->x + 1] == WALL_LEFT_RIGHT || tela[c->y][c->x + 1] == WALL_TOP_BOTTOM) {
-			system("pause");
 		}
-		
+		else {
+			if (c->y != food.Y && c->x != food.X) {
+				int x = 1;
+				for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
+					x++;
+				}
+				finaliza_tela(tela,x,c);
+			}
+		}
 		break;
 
 	}
 	
 }
 
-int teste(int x, Snake *c) {
+int placar(int x, Snake *c) {
 	x = 1;	
 	for (Snake *ax = c; ax->proximo != NULL; ax = ax->proximo) {
 		x++;
 	}
 	return(x);
 }
-
-
 
 int main() {
 	setlocale(LC_ALL, "UTF-8");
@@ -364,47 +367,40 @@ int main() {
 	corp = inicializa_snake(tela, corp, 2);
 	corp = inicializa_snake(tela, corp, 1);
 	corp = inicializa_snake(tela, corp, 0);
-	corp->proximo->proximo->cabeca = true;
-	for (Snake *ax = corp; ax->proximo != NULL; ax = ax->proximo) {
-		printf("\n x :  %d\n y : %d \n d : %d \n kbc : %d", ax->x, ax->y, ax->d, ax->cabeca);
-	}
-	system("pause");
 	desenhasnake(tela, corp);
 
 	inicializa_tela(tela);
 	
 	boolean a=true;
-	COORD coord;
+	COORD coord,food;
 	coord.Y = HEIGHT / 2;
 	coord.X = WIDTH / 2;
-	
 	int x=0;
-	
-	
 
 	desenha(tela);
-	comida(tela);
+	food = comida(tela);
 	while (a) {
-		
 		if (_kbhit()) {
-			char tecla = _getch();
+			char tecla = _getch(); fflush(stdin);
 			switch (tecla)
 			{
 				
 			case MOVE_CIMA:
-				move_snake(tela, corp,CIMA);
+				move_snake(tela, corp,CIMA, &food);
+
 				break;
 
 			case MOVE_BAIXO:
-				move_snake(tela, corp,BAIXO);
+				move_snake(tela, corp,BAIXO, &food);
 				break;
 
 			case MOVE_ESQUERDA:
-				move_snake(tela, corp, ESQUERDA);
+				move_snake(tela, corp, ESQUERDA, &food);
+
 				break;
 
 			case MOVE_DIREITA:
-				move_snake(tela, corp,DIREITA);
+				move_snake(tela, corp,DIREITA, &food);
 				break;
 
 			case 's':
@@ -417,16 +413,12 @@ int main() {
 				break;
 			}
 		}
-		if (tela[corp->x][corp->y] == FOOD) {
-			system("pause");
-		}
-		fflush(stdin);
-		move_snake(tela, corp, corp->d);
+		move_snake(tela, corp, corp->d, &food);
+		cursor(food, FOOD);
 		Sleep(70);
-		
-		x = teste(x,corp);
-		cursor({ 0,0 },' ');
-		printf("%d", x);
+		x = placar(x,corp);
+		cursor({ WIDTH/2-7 ,HEIGHT-1 },' ');
+		printf("PLACAR : %d", x);
 
 	}
 	return(0);
