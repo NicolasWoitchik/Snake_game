@@ -1,36 +1,9 @@
-﻿Build started 18/11/2015 12:06:35.
+﻿Build started 19/02/2016 19:11:19.
      1>Project "C:\Users\Nicolas\Desktop\Facul\2 semestre\programação imperativa\Exercicios\Cobrinha\Cobrinha\Cobrinha\Cobrinha.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Source.cpp
+         Skipping... (no relevant changes detected)
          Source.cpp
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(47): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(59): warning C4553: '==': operator has no effect; did you intend '='?
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(60): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(75): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(82): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(92): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(93): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(94): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(95): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(139): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(179): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(182): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(195): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(198): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(225): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(228): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(243): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(246): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(272): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(275): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(288): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(291): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(317): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(320): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(333): warning C4309: '=': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(336): warning C4309: 'argument': truncation of constant value
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(158): warning C4101: 'ax': unreferenced local variable
-     1>c:\users\nicolas\desktop\facul\2 semestre\programação imperativa\exercicios\cobrinha\cobrinha\cobrinha\source.cpp(361): warning C4101: 'y': unreferenced local variable
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Nicolas\Desktop\Facul\2 semestre\programação imperativa\Exercicios\Cobrinha\Cobrinha\Debug\Cobrinha.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Nicolas\Desktop\Facul\2 semestre\programação imperativa\Exercicios\Cobrinha\Cobrinha\Debug\Cobrinha.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Nicolas\Desktop\Facul\2 semestre\programação imperativa\Exercicios\Cobrinha\Cobrinha\Debug\Cobrinha.lib" /MACHINE:X86 Debug\Source.obj
          Cobrinha.vcxproj -> C:\Users\Nicolas\Desktop\Facul\2 semestre\programação imperativa\Exercicios\Cobrinha\Cobrinha\Debug\Cobrinha.exe
@@ -38,4 +11,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.78
+Time Elapsed 00:00:03.60
